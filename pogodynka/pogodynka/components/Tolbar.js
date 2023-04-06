@@ -35,7 +35,7 @@ const Tolbar = ({helpMode,setHelpMode}) => {
   )
 }
 
-Tolbar.PropTypes ={
+Tolbar.propTypes ={
     helpMode: PropTypes.bool,
     setHelpMode: PropTypes.func
 }
