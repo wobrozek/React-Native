@@ -14,7 +14,7 @@ const Tolbar = ({helpMode,setHelpMode}) => {
         tolbar:{
           width:'100%',
           height:70,
-          backgroundColor:'#9F6BC8',
+          backgroundColor:'#6c5ce7',
           justifyContent:'space-between',
           alignItems:'center',
           flexDirection:'row',
