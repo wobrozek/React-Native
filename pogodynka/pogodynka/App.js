@@ -12,7 +12,7 @@ export default function App() {
   const [data, setData]=useState({});
 
   useEffect(()=>{
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=metric`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=metric&lang=pl`)
     .then(response => response.json())
     .then(json => {
       if (json?.message === "city not found"){
@@ -21,8 +21,10 @@ export default function App() {
         } else {
           AlertIOS.alert("City doesn't exist");
         }
+        return
       }
-      setData(json);
+      console.log(data);
+      setData({...json});
     })
     .catch(error => {
       console.log(error);
@@ -38,7 +40,7 @@ export default function App() {
     <View>
       <Tolbar helpMode={helpMode} setHelpMode={setHelpMode}/>
       <Input placeholder={city} icon={"search"} callback={changeCity} ></Input>
-      <DisplayWeather data={data.main} helpMode={helpMode}/>
+      <DisplayWeather data={data} helpMode={helpMode}/>
     </View>
   );
 
