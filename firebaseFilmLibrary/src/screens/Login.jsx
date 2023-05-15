@@ -1,9 +1,14 @@
 import React from 'react'
-import { TextInput } from 'react-native'
+import { TextInput,Button,View } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native';
 
-const Login = () => {
+const Login = ({ navigation }) => {
   return (
-    <TextInput></TextInput>
+    <View>
+      <TextInput></TextInput>
+      <TextInput></TextInput>
+      <Button title="Login" onPress={() => navigation.navigate('Movies')}/>
+    </View>
   )
 }
 

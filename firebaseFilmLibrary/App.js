@@ -14,7 +14,6 @@ export default function App() {
         <Stack.Screen
           name="Login"
           component={Login}
-          options={{title: 'Login'}}
         />
         <Stack.Screen name="Movies" component={MoviesScreen} />
       </Stack.Navigator>
