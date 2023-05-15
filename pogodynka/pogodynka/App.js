@@ -23,7 +23,6 @@ export default function App() {
         }
         return
       }
-      console.log(data);
       setData({...json});
     })
     .catch(error => {
