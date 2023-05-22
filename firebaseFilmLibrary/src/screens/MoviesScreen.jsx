@@ -3,10 +3,13 @@ import { FlatList,ToastAndroid,Text,View } from 'react-native';
 import Input from '../components/Input';
 import {API_KEY} from '@env'
 import MoviesTile from '../components/MoviesTile';
+import { collection, getDocs } from "firebase/firestore";
+import { db } from '../firebaseConfig';
 
 const MoviesScreen = ({navigation}) => {
   const [data,setData]=useState([]);
   const [loading,setLoading]=useState(false);
+  const [watchlist,setWatchlist]=useState([]);
 
   const fetchData = async (movie) => {
     setLoading(true);
@@ -22,22 +25,24 @@ const MoviesScreen = ({navigation}) => {
     }
   };
 
-  const movies=[
-    {
-    imdbID:"tt6247936",
-Poster:"https://m.media-amazon.com/images/M/MV5BN2U4YjAxNWUtNDg3Yy00ZmZiLThkMGItODk0MDM3Y2RhYzNlXkEyXkFqcGdeQXVyMjQ3NzUxOTM@._V1_SX300.jpg",
-Title:"Django",
-Type:"movie",
-Year:"2017"
-    },
-    {
-      imdbID:"tt6247936",
-  Poster:"https://m.media-amazon.com/images/M/MV5BN2U4YjAxNWUtNDg3Yy00ZmZiLThkMGItODk0MDM3Y2RhYzNlXkEyXkFqcGdeQXVyMjQ3NzUxOTM@._V1_SX300.jpg",
-  Title:"Django v2",
-  Type:"movie",
-  Year:"2224"
-      }
-  ]
+  const getFirebase =async()=>{
+    const querySnapshot = await getDocs(collection(db, "watchlist"));
+
+    let apiData = querySnapshot.docs.map((doc) => doc.data());
+
+    console.log(apiData);
+    setWatchlist(apiData);
+  }
+
+  const addToWatchlist=(movie)=>{
+    setWatchlist([...watchlist, movie])
+  }
+
+useEffect(()=>{
+  if(watchlist?.length===0){
+    getFirebase();
+  }
+},[])
 
   return (
     <View>
@@ -45,14 +50,14 @@ Year:"2017"
     {loading && <Text>Loading...</Text>}
       
       {(data?.length != 0 || undefined ) && data?.map((element)=>(
-      <MoviesTile key={element?.imdbID} movie={element} navigation={navigation}  />
+      <MoviesTile key={element?.imdbID} movie={element} navigation={navigation} onSubmit={addToWatchlist} />
       ))}
 
       <View>
         <Text>Moje filmy</Text>
         <FlatList
-        data={movies}
-        renderItem={({item})=><MoviesTile movie={item} navigation={navigation}/>}
+        data={watchlist}
+        renderItem={({item})=><MoviesTile movie={item} navigation={navigation} onSubmit={addToWatchlist} />}
         keyExtractor={item => item.imdbID}
       />
       </View>

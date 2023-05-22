@@ -23,8 +23,7 @@
     "react-navigation": "^4.4.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "eslint": "^8.40.0"
+    "@babel/core": "^7.20.0"
   },
   "private": true
 }
