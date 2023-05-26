@@ -1,15 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FlatList,ToastAndroid,Text,View } from 'react-native';
 import Input from '../components/Input';
 import {API_KEY} from '@env'
 import MoviesTile from '../components/MoviesTile';
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc,getDocs } from "firebase/firestore";
 import { db } from '../firebaseConfig';
+import { ScrollView } from 'react-native-gesture-handler';
+import { userContext } from '../../App';
 
 const MoviesScreen = ({navigation}) => {
   const [data,setData]=useState([]);
   const [loading,setLoading]=useState(false);
   const [watchlist,setWatchlist]=useState([]);
+  const [inputText,setInputText]=useState("");
+
+  const context = useContext(userContext);
 
   const fetchData = async (movie) => {
     setLoading(true);
@@ -26,11 +31,13 @@ const MoviesScreen = ({navigation}) => {
   };
 
   const getFirebase =async()=>{
-    const querySnapshot = await getDocs(collection(db, "watchlist"));
+    const docRef = doc(db, "user",context.user.uid);
+    const colRef = collection(docRef,'watchlist');
+
+    const querySnapshot = await getDocs(colRef);
 
     let apiData = querySnapshot.docs.map((doc) => doc.data());
 
-    console.log(apiData);
     setWatchlist(apiData);
   }
 
@@ -45,22 +52,26 @@ useEffect(()=>{
 },[])
 
   return (
-    <View>
-    <Input placeholder="Search Movie" icon="search" onSubmit={(movie)=>{fetchData(movie)}} />
-    {loading && <Text>Loading...</Text>}
-      
-      {(data?.length != 0 || undefined ) && data?.map((element)=>(
-      <MoviesTile key={element?.imdbID} movie={element} navigation={navigation} onSubmit={addToWatchlist} />
-      ))}
+    <View style={{flex:1}} >
+        <Input placeholder="Search Movie" icon="search" onSubmitEditing={()=>{fetchData(inputText)}} value={inputText} onChange={(value)=>{setInputText(value.nativeEvent.text)}} />
+        {loading && <Text>Loading...</Text>}
+          
+          {(data?.length != 0 || undefined ) && data?.map((element)=>(
+          <MoviesTile key={element?.imdbID} movie={element} navigation={navigation} onSubmit={addToWatchlist} /> 
+          ))}
 
-      <View>
-        <Text>Moje filmy</Text>
-        <FlatList
-        data={watchlist}
-        renderItem={({item})=><MoviesTile movie={item} navigation={navigation} onSubmit={addToWatchlist} />}
-        keyExtractor={item => item.imdbID}
-      />
-      </View>
+        <View style={{flex:1}} >
+          <Text>Moje filmy</Text>
+          <FlatList 
+          style={{flex:1}}
+          data={watchlist}
+          renderItem={({item})=><MoviesTile movie={item} navigation={navigation} onSubmit={addToWatchlist} />}
+          keyExtractor={item => item.imdbID}
+          concontentContainerStyle={{
+          flexGrow: 1,
+          }}
+        />
+        </View>
     </View>
   )
 }

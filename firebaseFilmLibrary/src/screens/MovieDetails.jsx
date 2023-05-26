@@ -1,27 +1,37 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, Text ,Image, View, StyleSheet} from 'react-native'
-import { collection, addDoc } from "firebase/firestore"; 
+import { collection,doc, addDoc } from "firebase/firestore"; 
 import { db } from '../firebaseConfig';
+import { userContext } from '../../App';
 
 const MovieDetails = ({route,navigation}) => {
-    const {movie,onSubmit}= route.params;
-    console.log(movie);
+
+  const context = useContext(userContext);
+  const {movie,onSubmit}= route.params;
 
     const  addToFirebase=async()=>{
       try {
-        const docRef = await addDoc(collection(db, "watchlist"), {
+        //get subcolection
+        const docRef = doc(db, "user",context.user.uid);
+        const colRef = collection(docRef,'watchlist');
+
+        //add to subcolection
+        addDoc(colRef,{
           imdbID:movie.imdbID,
           Poster:movie.Poster,
           Title:movie.Title,
           Type:movie.Type,
           Year:movie.Year
-        });
-        console.log("Document written with ID: ", docRef.id);
+        })
+
+        onSubmit(movie);
       } catch (e) {
-        console.error("Error adding document: ", e);
+        console.log(e);
       }
-      onSubmit(movie);
+      
     }
+
+    console.log(context.user);
 
   const style =StyleSheet.create({
     image:{
