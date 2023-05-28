@@ -52,7 +52,8 @@ const MovieDetails = ({route,navigation}) => {
 
         onAdd(movie);
         setIsInWatchlist(true);
-        baseRef.current=currentMovieDoc;
+        const snapshot = await getDoc(currentMovieDoc);
+        baseRef.current=snapshot.id;
 
       } catch (e) {
         console.log(e);
@@ -62,9 +63,6 @@ const MovieDetails = ({route,navigation}) => {
     const removeFirebase= async()=>{
       const docRef = doc(db, "user",context.user.uid);
       const colRef = collection(docRef,'watchlist');
-
-      console.log(baseRef.current);
-      console.log(colRef);
 
       try{
       deleteDoc(doc(colRef,baseRef.current));

@@ -66,7 +66,7 @@ useEffect(()=>{
         {loading && <Text>Loading...</Text>}
           
           {(data?.length != 0 || undefined ) && data?.map((element)=>(
-          <MoviesTile key={element?.imdbID} movie={element} navigation={navigation} onSubmit={addToWatchlist} /> 
+          <MoviesTile key={element?.imdbID} movie={element} navigation={navigation} onAdd={addToWatchlist} onDelete={removeFromWatchlist} /> 
           ))}
 
         <View style={{flex:1}} >
