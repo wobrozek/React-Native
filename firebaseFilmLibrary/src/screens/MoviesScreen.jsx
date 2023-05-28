@@ -45,6 +45,15 @@ const MoviesScreen = ({navigation}) => {
     setWatchlist([...watchlist, movie])
   }
 
+  const removeFromWatchlist=(id)=>{
+
+    setWatchlist((oldWatchlist) =>{
+      return oldWatchlist.filter((movie)=>{return movie.imdbID !== id});
+    }
+    )
+
+  }
+
 useEffect(()=>{
   if(watchlist?.length===0){
     getFirebase();
@@ -65,7 +74,7 @@ useEffect(()=>{
           <FlatList 
           style={{flex:1}}
           data={watchlist}
-          renderItem={({item})=><MoviesTile movie={item} navigation={navigation} onSubmit={addToWatchlist} />}
+          renderItem={({item})=><MoviesTile movie={item} navigation={navigation} onAdd={addToWatchlist} onDelete={removeFromWatchlist} />}
           keyExtractor={item => item.imdbID}
           concontentContainerStyle={{
           flexGrow: 1,

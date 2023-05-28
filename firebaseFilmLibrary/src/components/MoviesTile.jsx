@@ -2,7 +2,7 @@ import React from 'react'
 import { Image, View,Text,StyleSheet,TouchableHighlight,CardItem  } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 
-const MoviesTile = ({movie,navigation,onSubmit}) => {
+const MoviesTile = ({movie,navigation,onAdd,onDelete}) => {
 
 
   const style= StyleSheet.create({
@@ -10,16 +10,14 @@ const MoviesTile = ({movie,navigation,onSubmit}) => {
       borderWidth:1,
       borderColor:"#fff",
       paddinig:10,
-      flexDirection:'row',
+    flexDirection:'row',
       justifyContent:'space-between'
     }
   }) 
 
   const handlePress =()=>{
-    navigation.navigate('MovieDetails',{movie:movie,onSubmit:onSubmit});
+    navigation.navigate('MovieDetails',{movie:movie,onAdd:onAdd,onDelete:onDelete});
   }
-
-  
 
   return (
     <TouchableHighlight onPress={handlePress} underlayColor='#a4b0be'>

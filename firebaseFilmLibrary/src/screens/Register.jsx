@@ -1,27 +1,30 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { Button,View,Text } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import Input from '../components/Input';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { userContext } from '../../App';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 
-const Login = ({ navigation }) => {
+const Register = ({ navigation }) => {
   const [login,setLogin]=useState("");
   const [password,setPassword]=useState("");
+  const [repetPassword,setRepetPassword]=useState("");
   const [error,setError]=useState("");
 
-  const context=useContext(userContext);
-
-  const handleLogin = () =>{
+  const handleRegister = () =>{
     const auth = getAuth();
-    signInWithEmailAndPassword(auth, login, password)
+
+    if(repetPassword != password){
+        setError("password and repeat password doesn't mach");
+        return;
+    }
+
+    createUserWithEmailAndPassword(auth, login, password)
     .then((userCredential) => {
     // Signed in 
-    const currentUser = userCredential.user;
-    context.loginUser(currentUser);
-    
+    const user = userCredential.user;
     navigation.navigate('Movies')
+    // ...
   })
   .catch((error) => {
     let errprSplit = error.code.split('/')
@@ -34,15 +37,15 @@ const Login = ({ navigation }) => {
     <View>
       <Input placeholder={"Email"} icon={"user"} value={login} onChange={(value)=>{setLogin(value.nativeEvent.text)}}/>
       <Input placeholder={"Password"} icon={"key"} value={password} onChange={(value)=>{setPassword(value.nativeEvent.text)}} secureTextEntry={true}/>
+      <Input placeholder={"Repeat password"} icon={"key"} value={repetPassword} onChange={(value)=>{setRepetPassword(value.nativeEvent.text)}} secureTextEntry={true}/>
       <View style={{padding:20, flexDirection:"row",justifyContent:'space-between'}}>
         <Text style={{color:"red"}}>{error}</Text> 
-        <Text onPress={()=>{navigation.navigate('Register')}} style={{textDecorationLine:'underline',color:"blue"}}> Register</Text> 
       </View>
     </View>
-      <Button title="Login" onPress={handleLogin}/>
+      <Button title="Register" onPress={handleRegister}/>
       
     </View>
   )
 }
 
-export default Login
+export default Register
