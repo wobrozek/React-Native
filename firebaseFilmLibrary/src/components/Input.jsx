@@ -10,14 +10,16 @@ const Input = (props) => {
 
     const styles=StyleSheet.create({
         inputWrapper:{
+          color:'#fff',
           flexDirection:'row', 
           alignItems:'center',
           paddingHorizontal:10,
           paddingVertical:5,
-          margin:20,
+          marginHorizontal:20,
+          marginTop:20,
           gap:10,
           borderWidth:5,
-          borderColor:'#000',
+          backgroundColor:"#fff"
         },
     
         input:{

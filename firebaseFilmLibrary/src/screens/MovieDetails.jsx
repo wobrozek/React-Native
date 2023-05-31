@@ -88,10 +88,10 @@ const MovieDetails = ({route,navigation}) => {
         <Image alt='Movie photo' source={{uri:movie.Poster}} style={style.image}/>
 
         <View>
-          <Text style={{fontSize:20,padding:20}}>
+          <Text style={{fontSize:20,padding:20,color:"#fff"}}>
             {movie.Title}
           </Text>
-          <Text style={{fontSize:15,paddingHorizontal:20,paddingBottom:20}}>{movie.Year}</Text>
+          <Text style={{fontSize:15,paddingHorizontal:20,paddingBottom:20,color:"#fff"}}>{movie.Year}</Text>
         </View>
 
         {!isInWatchlist ? (<Button 

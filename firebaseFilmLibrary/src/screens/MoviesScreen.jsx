@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { FlatList,ToastAndroid,Text,View } from 'react-native';
+import { FlatList,ToastAndroid,Text,View,StyleSheet, TouchableOpacity, Pressable } from 'react-native';
 import Input from '../components/Input';
 import {API_KEY} from '@env'
 import MoviesTile from '../components/MoviesTile';
@@ -7,6 +7,7 @@ import { collection, doc,getDocs } from "firebase/firestore";
 import { db } from '../firebaseConfig';
 import { ScrollView } from 'react-native-gesture-handler';
 import { userContext } from '../../App';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const MoviesScreen = ({navigation}) => {
   const [data,setData]=useState([]);
@@ -58,19 +59,43 @@ useEffect(()=>{
   if(watchlist?.length===0){
     getFirebase();
   }
+  setInputText("");
 },[])
+
+const style = StyleSheet.create({
+  close:{
+    justifyContent:'center',
+    paddingLeft:5
+  },
+  closeWraper:{
+    backgroundColor:"#fff",
+    opacity:0.8
+  }
+})
+
+const handleClose= ()=>{
+  setInputText("");
+  setData([]);
+}
 
   return (
     <View style={{flex:1}} >
         <Input placeholder="Search Movie" icon="search" onSubmitEditing={()=>{fetchData(inputText)}} value={inputText} onChange={(value)=>{setInputText(value.nativeEvent.text)}} />
-        {loading && <Text>Loading...</Text>}
-          
-          {(data?.length != 0 || undefined ) && data?.map((element)=>(
-          <MoviesTile key={element?.imdbID} movie={element} navigation={navigation} onAdd={addToWatchlist} onDelete={removeFromWatchlist} /> 
-          ))}
+        
+        { data.length !==0 && <View>
+          {loading && <Text style={{color:"#fff"}}>Loading...</Text>}
+          <View style={style.closeWraper}>
+            <Pressable  style={style.close} onPress={handleClose} >
+              <Icon name='close' style={{fontSize:30}}/>
+            </Pressable >
+          </View>
+            {(data?.length != 0 || undefined ) && data?.map((element)=>(
+            <MoviesTile key={element?.imdbID} movie={element} navigation={navigation} onAdd={addToWatchlist} onDelete={removeFromWatchlist} /> 
+            ))}
+        </View>}
 
         <View style={{flex:1}} >
-          <Text>Moje filmy</Text>
+          <Text style={{color:"#fff",fontSize:25,paddingLeft:20, marginVertical:20}}>My Movies</Text>
           <FlatList 
           style={{flex:1}}
           data={watchlist}

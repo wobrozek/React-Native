@@ -8,7 +8,9 @@ const MoviesTile = ({movie,navigation,onAdd,onDelete}) => {
   const style= StyleSheet.create({
     box:{
       borderWidth:1,
-      borderColor:"#fff",
+      borderColor:"#000",
+      backgroundColor:"#fff",
+      opacity:0.8,
       paddinig:10,
     flexDirection:'row',
       justifyContent:'space-between'
